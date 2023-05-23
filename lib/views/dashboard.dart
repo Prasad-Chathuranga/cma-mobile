@@ -1,4 +1,5 @@
-import 'package:cma_mobile/results.dart';
+import 'package:cma_mobile/constants.dart';
+import 'package:cma_mobile/views/results.dart';
 import 'package:cma_mobile/widgets/dashboard/cpd-credits-card.dart';
 import 'package:cma_mobile/widgets/dashboard/renewed-card.dart';
 import 'package:cma_mobile/widgets/dashboard/user-details.dart';
@@ -15,7 +16,7 @@ class _DashboardState extends State<Dashboard> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color.fromRGBO(39, 50, 80, 1),
+      backgroundColor: primaryBlue,
       appBar: AppBar(title: const Text('Dashboard')),
       drawer: Drawer(
         child: ListView(
@@ -23,7 +24,7 @@ class _DashboardState extends State<Dashboard> {
           children: [
             DrawerHeader(
               decoration: BoxDecoration(
-                color: Color.fromARGB(255, 5, 25, 50),
+                color: primaryBlue,
               ),
               child: Container(
                 child: Row(
