@@ -1,5 +1,7 @@
+import 'package:cma_mobile/helpers/data_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
 
 class RenewedCard extends StatelessWidget {
   const RenewedCard({super.key});
@@ -44,6 +46,10 @@ class Renewed extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
+    var provider = Provider.of<DataHelper>(context, listen: false);
+
+
     return Container(
       child: Card(
         // color: Color.fromARGB(106, 160, 156, 156),
@@ -87,7 +93,7 @@ class Renewed extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       const Padding(padding: EdgeInsets.only(top: 15.0)),
-                      const Row(children: [
+                      Row(children: [
                         Text(
                           'Renewed Upto',
                           style: TextStyle(
@@ -98,7 +104,7 @@ class Renewed extends StatelessWidget {
                       ]),
                       Row(children: [
                         Text(
-                          '2023',
+                          provider.getMemberUpto(),
                           style: TextStyle(
                             color: Colors.red.shade400,
                             fontSize: 24.0,
@@ -107,9 +113,9 @@ class Renewed extends StatelessWidget {
                           textAlign: TextAlign.left,
                         ),
                       ]),
-                      const Row(children: [
+                       Row(children: [
                         Text(
-                          'Internal',
+                          provider.getPath(),
                           style: TextStyle(
                             color: Color.fromARGB(255, 5, 25, 50),
                             fontSize: 15.0,

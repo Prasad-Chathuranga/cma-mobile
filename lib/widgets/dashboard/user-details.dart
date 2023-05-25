@@ -1,20 +1,25 @@
+import 'package:cma_mobile/helpers/data_helper.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class UserDetails extends StatelessWidget {
   const UserDetails({super.key});
 
   @override
   Widget build(BuildContext context) {
+    var provider = Provider.of<DataHelper>(context, listen: false);
+
     ThemeData themeData = Theme.of(context);
+
     return Container(
       padding: const EdgeInsets.only(left: 16.0, right: 16.0),
-      child: const Column(
+      child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
             Column(
               children: [
-                Row(children: [
+                const Row(children: [
                   Padding(
                     padding: EdgeInsets.only(right: 10.0),
                     child: Text(
@@ -28,26 +33,26 @@ class UserDetails extends StatelessWidget {
                   ),
                 ]),
                 Text(
-                  "ACMA1415",
-                  style: TextStyle(
+                  provider.getCMACode(),
+                  style: const TextStyle(
                       color: Colors.white,
                       fontSize: 26.0,
                       fontWeight: FontWeight.bold),
                 ),
                 Column(children: [
                   Text(
-                    "J.K.L.O.Rodrigo",
-                    style: TextStyle(color: Colors.white, fontSize: 20.0),
+                    provider.getFullName(),
+                    style: const TextStyle(color: Colors.white, fontSize: 14.0),
                   ),
                 ]),
               ],
             ),
-            Column(children: [
+             Column(children: [
               CircleAvatar(
                 backgroundColor: Colors.amber,
                 radius: 50.0,
                 child: CircleAvatar(
-                  backgroundImage: AssetImage('assets/images/avatar.png'),
+                  backgroundImage: AssetImage(provider.getProPic()),
                   radius: 45.0,
                 ),
               ),

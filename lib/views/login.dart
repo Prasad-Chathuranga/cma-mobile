@@ -1,5 +1,9 @@
+import 'dart:convert';
 import 'dart:developer';
+import 'dart:io';
 
+import 'package:cma_mobile/models/api_response.dart';
+import 'package:cma_mobile/services/user_services.dart';
 import 'package:cma_mobile/widgets/common/loader.dart';
 import 'package:flutter/material.dart';
 import 'package:cma_mobile/helpers/connection_helper.dart';
@@ -9,6 +13,7 @@ import 'package:cma_mobile/widgets/common/snackbar.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
+import 'package:http/http.dart' as http;
 
 class Login extends StatefulWidget {
   const Login({Key? key}) : super(key: key);
@@ -21,7 +26,7 @@ class _LoginState extends State<Login> {
   final _formKey = GlobalKey<FormState>();
   bool userInfoLoaded = false;
   bool loading = false;
-  String? code = 'ACMA1415', password = '1234';
+  String? code = 'ACMA1514', password = '12345';
 
   @override
   void initState() {
@@ -56,12 +61,12 @@ class _LoginState extends State<Login> {
       setState(() {
         loading = true;
       });
-
+      
       var value = await ConnectionHelper(context)
           .createRequest<ConnectionHelper>('get', '/')
           .withToken()
           .sendAndMap();
-
+     
       if (value == null) {
         sc.showSnackBar(const FlairSnackBar(
           'Unable to contact the server!',
@@ -80,6 +85,7 @@ class _LoginState extends State<Login> {
       }
       //Invalid status code
       else {
+        // print(value.responseCode);
         sc.showSnackBar(FlairSnackBar(
           value.message ?? 'Error',
         ).snackBar());
@@ -98,125 +104,135 @@ class _LoginState extends State<Login> {
       backgroundColor: const Color.fromARGB(255, 5, 25, 50),
       appBar: null,
       body: SafeArea(
-        child: SingleChildScrollView(
-          child: Column(
-            children: <Widget>[
-              Padding(
-                padding: const EdgeInsets.only(top: 100.0),
-                child: Center(
-                  child: SizedBox(
-                      width: 180,
-                      height: 180,
-                      child: Image.asset('assets/images/logo.png')),
-                ),
-              ),
-              Container(
-                padding: const EdgeInsets.only(top: 10.0, bottom: 20.0),
-                child: const Text(
-                  'Login to your account',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                      fontSize: 22.0,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white),
-                ),
-              ),
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: 15),
-                child: TextFormField(
-                  autovalidateMode: AutovalidateMode.onUserInteraction,
-                  cursorColor: Colors.white,
-                  style: TextStyle(color: Colors.white38),
-                  decoration: InputDecoration(
-                      border: OutlineInputBorder(),
-                      labelText: 'Username',
-                      labelStyle: TextStyle(color: Colors.white70),
-                      hintText: 'Enter your CMA Code',
-                      hintStyle: TextStyle(color: Colors.white38)),
-                  validator: (String? value) {
-                    if (value == null || value == '') {
-                      return "CMA Code is required";
-                    }
-                    return null;
-                  },
-                  onChanged: (value) => code = value,
-                  initialValue: 'ACMA1514',
-                ),
-              ),
-              Padding(
-                padding: EdgeInsets.only(
-                    left: 15.0, right: 15.0, top: 15, bottom: 0),
-                child: TextFormField(
-                  style: TextStyle(color: Colors.white38),
-                  obscureText: true,
-                  decoration: InputDecoration(
-                      border: OutlineInputBorder(),
-                      labelText: 'Password',
-                      labelStyle: TextStyle(color: Colors.white70),
-                      hintText: 'Enter your password',
-                      hintStyle: TextStyle(color: Colors.white38)),
-                  validator: (String? value) {
-                    if (value == null || value.trim().length < 6) {
-                      return "Password must be at least 6 letters long";
-                    }
-                    return null;
-                  },
-                  onChanged: (value) => password = value,
-                  initialValue: '12345',
-                ),
-              ),
-              Align(
-                alignment: Alignment.centerLeft,
-                child: Container(
-                  margin: const EdgeInsets.only(left: 15.0, top: 20.0),
-                  height: 50,
-                  width: 100,
-                  decoration: BoxDecoration(
-                      color: Colors.indigo.shade900,
-                      borderRadius: BorderRadius.circular(10.0)),
-                  child: TextButton(
-                    onPressed: () {
-                      _loginButtonClicked();
-                      // Navigator.push(context,
-                      //     MaterialPageRoute(builder: (_) => const Dashboard()));
-                    },
-                    child: const Text(
-                      'Login',
-                      style: TextStyle(color: Colors.white, fontSize: 16.0),
+        child: Stack(
+          children: [
+            Form(
+              key: _formKey,
+              child: Column(
+                children: <Widget>[
+                  Padding(
+                    padding: const EdgeInsets.only(top: 100.0),
+                    child: Center(
+                      child: SizedBox(
+                          width: 180,
+                          height: 180,
+                          child: Image.asset('assets/images/logo.png')),
                     ),
                   ),
-                ),
-              ),
-              Align(
-                alignment: Alignment.centerRight,
-                child: Container(
-                  margin: const EdgeInsets.only(top: 30.0),
-                  child: TextButton(
-                    onPressed: () {},
+                  Container(
+                    padding: const EdgeInsets.only(top: 10.0, bottom: 20.0),
                     child: const Text(
-                      'Retrive Password',
-                      style: TextStyle(color: Colors.blue, fontSize: 16),
+                      'Login to your account',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                          fontSize: 22.0,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white),
                     ),
                   ),
-                ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 15),
+                    child: TextFormField(
+                      autovalidateMode: AutovalidateMode.onUserInteraction,
+                      cursorColor: Colors.white,
+                      style: const TextStyle(color: Colors.white38),
+                      decoration: const InputDecoration(
+                          border: OutlineInputBorder(),
+                          labelText: 'Username',
+                          labelStyle: TextStyle(color: Colors.white70),
+                          hintText: 'Enter your CMA Code',
+                          hintStyle: TextStyle(color: Colors.white38)),
+                      validator: (String? value) {
+                        if (value == null || value == '') {
+                          return "CMA Code is required";
+                        }
+                        return null;
+                      },
+                      onChanged: (value) => code = value,
+                      initialValue: 'ACMA1514',
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(
+                        left: 15.0, right: 15.0, top: 15, bottom: 0),
+                    child: TextFormField(
+                      autovalidateMode: AutovalidateMode.onUserInteraction,
+                      style: const TextStyle(color: Colors.white38),
+                      obscureText: true,
+                      decoration: const InputDecoration(
+                          border: OutlineInputBorder(),
+                          labelText: 'Password',
+                          labelStyle: TextStyle(color: Colors.white70),
+                          hintText: 'Enter your password',
+                          hintStyle: TextStyle(color: Colors.white38)),
+                      validator: (String? value) {
+                        if (value == null || value == '') {
+                          return "Password is required";
+                        }
+                        // if (value.trim().length < 6) {
+                        //   return "Password must be at least 6 letters long";
+                        // }
+                        return null;
+                      },
+                      onChanged: (value) => password = value,
+                      initialValue: '12345',
+                    ),
+                  ),
+                  Align(
+                    alignment: Alignment.centerLeft,
+                    child: Container(
+                      margin: const EdgeInsets.only(left: 15.0, top: 20.0),
+                      height: 50,
+                      width: 100,
+                      decoration: BoxDecoration(
+                          color: Colors.indigo.shade900,
+                          borderRadius: BorderRadius.circular(10.0)),
+                      child: TextButton(
+                        onPressed: () {
+                          _loginButtonClicked();
+                          // Navigator.push(context,
+                          //     MaterialPageRoute(builder: (_) => const Dashboard()));
+                        },
+                        child: const Text(
+                          'Login',
+                          style: TextStyle(color: Colors.white, fontSize: 16.0),
+                        ),
+                      ),
+                    ),
+                  ),
+                  Align(
+                    alignment: Alignment.centerRight,
+                    child: Container(
+                      margin: const EdgeInsets.only(top: 30.0),
+                      child: TextButton(
+                        onPressed: () {},
+                        child: const Text(
+                          'Retrive Password',
+                          style: TextStyle(color: Colors.blue, fontSize: 16),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
               ),
-            ],
-          ),
+            ),
+             if (loading) const Loader()
+          ],
+          
         ),
+   
       ),
     );
-    // if (loading) const Loader();
   }
 
   void _loginButtonClicked() {
-    // if (_formKey.currentState?.validate() == true) {
-    //   Fluttertoast.showToast(msg: 'Okay');
-    //   setState(() {
-    //     loading = true;
-    //   });
+    if (_formKey.currentState?.validate() == true) {
+      setState(() {
+        loading = true;
+      });
 
-    loginUser();
-    // }
+      loginUser();
+    }
   }
 
   void loginUser() async {
@@ -246,7 +262,6 @@ class _LoginState extends State<Login> {
       ).snackBar());
     }
 
-    // Fluttertoast.showToast(msg: response?.data!['data']['token']);
     if (response!.responseCode == 200) {
       provider.writeToken(response.data!['data']['token']);
 

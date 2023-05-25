@@ -48,7 +48,7 @@ class ConnectionHelper {
       {Map<String, String>? queryParams}) {
     _request = http.Request(
         method,
-        Uri.https(DataHelper.apiEndPoint, "${DataHelper.apiPath}/$path",
+        Uri.http(DataHelper.apiEndPoint, "${DataHelper.apiPath}/$path",
             queryParams));
 
     return this as T;

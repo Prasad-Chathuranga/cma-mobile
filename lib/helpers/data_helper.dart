@@ -9,7 +9,7 @@ import 'package:uuid/uuid.dart';
 
 class DataHelper with ChangeNotifier {
   //API
-  static String get apiEndPoint => '127.0.0.1:8000';
+  static String get apiEndPoint => 'localhost:8000';
   static String get apiPath => 'api/mobile';
 
   SharedPreferences? _pref;
@@ -126,9 +126,29 @@ class DataHelper with ChangeNotifier {
     return _userData?['firstName'] ?? '';
   }
 
+  String getFullName() {
+    return _userData?['fullName'] ?? '';
+  }
+
+  String getCMACode() {
+    return _userData?['CMACode'] ?? '';
+  }
+
+  String getMemberUpto() {
+    return _userData?['MemeberUpto'] ?? '';
+  }
+
+  String getPath() {
+    return _userData?['path'] ?? '';
+  }
+
+  String getProPic() {
+    return _userData?['image'] ?? '';
+  }
+
   /// Get last name of logged in user
   String getLastName() {
-    return _userData?['lastName'] ?? '';
+    return  _userData?['lastName'] ?? '';
   }
 
   /// Get timezone of the server
