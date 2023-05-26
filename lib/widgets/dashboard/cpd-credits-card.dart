@@ -1,4 +1,8 @@
+import 'package:cma_mobile/helpers/connection_helper.dart';
+import 'package:cma_mobile/helpers/data_helper.dart';
+import 'package:cma_mobile/widgets/common/snackbar.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class CPDCreditsCard extends StatelessWidget {
   const CPDCreditsCard({super.key});
@@ -38,11 +42,76 @@ class CPDCreditsCard extends StatelessWidget {
   }
 }
 
-class CPDCredits extends StatelessWidget {
+class CPDCredits extends StatefulWidget {
   const CPDCredits({super.key});
 
   @override
+  State<CPDCredits> createState() => _CPDCredits();
+}
+
+class _CPDCredits extends State<CPDCredits> {
+  Map? _cpd;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      var provider = Provider.of<DataHelper>(context, listen: false);
+      provider.addListener(_providerListener);
+    });
+    ;
+  }
+
+  void _providerListener() {
+    try {
+      getCPDCreditsStats();
+    } catch (_) {}
+  }
+
+  Future<void> getCPDCreditsStats() async {
+    // var sc = ScaffoldMessenger.of(context);
+
+    var provider = Provider.of<DataHelper>(context, listen: false);
+
+    var value = await ConnectionHelper(context)
+        .createRequest<ConnectionHelper>('get', 'cpd-credits',
+            queryParams: {"customer_id": provider.getCustomerId()})
+        .withToken()
+        .sendAndMap();
+
+    provider.setCPDCreditsData(value!.data!['data']);
+
+    DateTime nowDate = DateTime.now();
+    int currYear = nowDate.year;
+
+    //  print(provider.getCPDCreditsByYear((currYear-2).toString()));
+
+    // for (var i = currYear; i >= currYear - 2; i--) {
+    //   print(i);
+    //   print(value!.data!['data'][i.toString()][0]);
+    // }
+
+// print(currYear.toString());
+
+    // if (value == null) {
+    //   sc.showSnackBar(const FlairSnackBar(
+    //     'Unable to contact the server!',
+    //   ).snackBar());
+    // }
+
+    // provider.setUserData(value.data!['data']);
+  }
+
+  @override
   Widget build(BuildContext context) {
+    var provider = Provider.of<DataHelper>(context, listen: false);
+
+    DateTime nowDate = DateTime.now();
+    int currYear = nowDate.year;
+
+    // print(provider.getCPD());
     return Container(
       child: Card(
         // color: Color.fromARGB(106, 160, 156, 156),
@@ -104,7 +173,7 @@ class CPDCredits extends StatelessWidget {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Text(
-                                      "06/20",
+                                      provider.getCPDByYear(currYear.toString()),
                                       style: TextStyle(
                                         color: Colors.red.shade400,
                                         fontSize: 18.0,
@@ -112,7 +181,7 @@ class CPDCredits extends StatelessWidget {
                                       ),
                                     ),
                                     Text(
-                                      '2023',
+                                      currYear.toString(),
                                       style: TextStyle(
                                         color:
                                             const Color.fromARGB(255, 34, 5, 4),
@@ -125,14 +194,15 @@ class CPDCredits extends StatelessWidget {
                               Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    Text('17/20',
+                                    Text(
+                                        provider.getCPDByYear((currYear-1).toString()),
                                         style: TextStyle(
                                           color: Colors.red.shade400,
                                           fontSize: 18.0,
                                           fontWeight: FontWeight.bold,
                                         )),
                                     Text(
-                                      '2022',
+                                      (currYear-1).toString(),
                                       style: TextStyle(
                                         color:
                                             const Color.fromARGB(255, 34, 5, 4),
@@ -145,7 +215,7 @@ class CPDCredits extends StatelessWidget {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Text(
-                                      '16/20',
+                                      provider.getCPDByYear((currYear-2).toString()),
                                       style: TextStyle(
                                         color: Colors.red.shade400,
                                         fontSize: 18.0,
@@ -153,7 +223,7 @@ class CPDCredits extends StatelessWidget {
                                       ),
                                     ),
                                     Text(
-                                      '2021',
+                                      (currYear-2).toString(),
                                       style: TextStyle(
                                         color:
                                             const Color.fromARGB(255, 34, 5, 4),

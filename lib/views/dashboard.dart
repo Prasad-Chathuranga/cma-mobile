@@ -1,9 +1,13 @@
 import 'package:cma_mobile/constants.dart';
+import 'package:cma_mobile/helpers/connection_helper.dart';
+import 'package:cma_mobile/helpers/data_helper.dart';
 import 'package:cma_mobile/views/results.dart';
+import 'package:cma_mobile/widgets/common/snackbar.dart';
 import 'package:cma_mobile/widgets/dashboard/cpd-credits-card.dart';
 import 'package:cma_mobile/widgets/dashboard/renewed-card.dart';
 import 'package:cma_mobile/widgets/dashboard/user-details.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class Dashboard extends StatefulWidget {
   const Dashboard({super.key});
@@ -13,6 +17,36 @@ class Dashboard extends StatefulWidget {
 }
 
 class _DashboardState extends State<Dashboard> {
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    // getCPDCreditsStats();
+  }
+
+  void getCPDCreditsStats() async {
+  
+    var sc = ScaffoldMessenger.of(context);
+
+    var provider = Provider.of<DataHelper>(context, listen: false);
+
+    var value = await ConnectionHelper(context)
+        .createRequest<ConnectionHelper>('get', 'cpd-credits',
+            queryParams: {"customer_id": provider.getCustomerId()})
+        .withToken()
+        .sendAndMap();
+
+    print(value);
+
+    if (value == null) {
+      sc.showSnackBar(const FlairSnackBar(
+        'Unable to contact the server!',
+      ).snackBar());
+    }
+
+    // provider.setUserData(value.data!['data']);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(

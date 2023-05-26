@@ -19,6 +19,7 @@ class DataHelper with ChangeNotifier {
   static double? _deviceSize;
 
   Map? _userData;
+  Map? _cpdCreditsData;
 
   void Function(int type)? _operationCallback;
 
@@ -121,6 +122,10 @@ class DataHelper with ChangeNotifier {
     return out;
   }
 
+  String getCPDCreditsByYear(String year) {
+    return _cpdCreditsData?[year];
+  }
+
   /// Get first name of logged in user
   String getFirstName() {
     return _userData?['firstName'] ?? '';
@@ -146,9 +151,27 @@ class DataHelper with ChangeNotifier {
     return _userData?['image'] ?? '';
   }
 
+  String getCustomerId() {
+    return _userData?['customer_id'] ?? '';
+  }
+
+  String getCPDByYear(String year) {
+    return _userData?[year] ?? '';
+  }
+
   /// Get last name of logged in user
   String getLastName() {
-    return  _userData?['lastName'] ?? '';
+    return _userData?['lastName'] ?? '';
+  }
+
+  Map<String, String> getCPDCredits() {
+    var out = <String, String>{};
+
+    _userData?['cpd'].forEach((key, value) {
+      out[key] = value;
+    });
+
+    return out;
   }
 
   /// Get timezone of the server
@@ -210,5 +233,13 @@ class DataHelper with ChangeNotifier {
 
   SharedPreferences? getPrefManager() {
     return _pref;
+  }
+
+  void setCPDCreditsData(Map<String, dynamic> data) {
+    _cpdCreditsData = <String, String>{};
+
+    data.forEach((key, value) {
+      _cpdCreditsData?[key] = value[0].toString();
+    });
   }
 }

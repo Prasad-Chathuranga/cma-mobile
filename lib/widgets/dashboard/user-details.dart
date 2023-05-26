@@ -1,6 +1,7 @@
 import 'package:cma_mobile/helpers/data_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'dart:typed_data';
 
 class UserDetails extends StatelessWidget {
   const UserDetails({super.key});
@@ -10,6 +11,26 @@ class UserDetails extends StatelessWidget {
     var provider = Provider.of<DataHelper>(context, listen: false);
 
     ThemeData themeData = Theme.of(context);
+    
+    Widget? avatar;
+    var image = provider.getImage();
+
+    //Default image
+    if (image == null) {
+      avatar = const CircleAvatar(
+        radius: 45.0,
+        child: Icon(Icons.person)
+      );
+    } else {
+      avatar = CircleAvatar(
+        radius: 45,
+        backgroundImage: Image.memory(
+          fit: BoxFit.cover,
+          image,
+          filterQuality: FilterQuality.medium,
+        ).image,
+      );
+    }
 
     return Container(
       padding: const EdgeInsets.only(left: 16.0, right: 16.0),
@@ -47,14 +68,15 @@ class UserDetails extends StatelessWidget {
                 ]),
               ],
             ),
-             Column(children: [
+            Column(children: [
               CircleAvatar(
                 backgroundColor: Colors.amber,
                 radius: 50.0,
-                child: CircleAvatar(
-                  backgroundImage: AssetImage(provider.getProPic()),
-                  radius: 45.0,
-                ),
+                child: avatar,
+                // CircleAvatar(
+                //   backgroundImage: Image.memory(provider.getImage()).image,
+                //   radius: 45.0,
+                // ),
               ),
             ]),
           ]),
