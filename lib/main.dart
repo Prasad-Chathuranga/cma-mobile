@@ -1,4 +1,5 @@
 import 'package:cma_mobile/constants.dart';
+import 'package:cma_mobile/logout.dart';
 import 'package:cma_mobile/views/dashboard.dart';
 import 'package:cma_mobile/helpers/connection_helper.dart';
 import 'package:cma_mobile/helpers/data_helper.dart';
@@ -29,6 +30,10 @@ final GoRouter _router =
     builder: (context, state) => const Login(),
   ),
   GoRoute(path: '/', builder: (context, state) => const Dashboard(), routes: [
+     GoRoute(
+      path: 'logout',
+      builder: (context, state) => const logout(),
+    ),
     // GoRoute(
     //   path: 'calendar',
     //   builder: (context, state) => const FlairCalendar(),
@@ -37,7 +42,8 @@ final GoRouter _router =
     //   path: 'contact',
     //   builder: (context, state) => const FlairContact(),
     // )
-  ])
+  ]),
+   
 ]);
 
 class MainRouter extends StatelessWidget {

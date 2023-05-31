@@ -4,11 +4,11 @@ import 'package:flutter/material.dart';
 
 enum SnackBarType { info, error, success }
 
-class FlairSnackBar {
+class CMASnackBar {
   final String message;
   final SnackBarType type;
 
-  const FlairSnackBar(this.message, {this.type = SnackBarType.error});
+  const CMASnackBar(this.message, {this.type = SnackBarType.error});
 
   static String _getMessage(CMAResponse res) {
     String msg = res.message == null || res.message!.isEmpty
@@ -36,19 +36,19 @@ class FlairSnackBar {
 
     if (res == null || res.isOk == false) {
       scaffoldMsg.showSnackBar(
-          FlairSnackBar(message ?? 'Connection error').snackBar());
+          CMASnackBar(message ?? 'Connection error').snackBar());
 
       return false;
     }
 
     if (res.responseCode != 200) {
-      scaffoldMsg.showSnackBar(FlairSnackBar(_getMessage(res)).snackBar());
+      scaffoldMsg.showSnackBar(CMASnackBar(_getMessage(res)).snackBar());
       return false;
     }
 
     if (showSuccess) {
       scaffoldMsg.showSnackBar(
-          FlairSnackBar(res.message ?? 'Success', type: SnackBarType.success)
+          CMASnackBar(res.message ?? 'Success', type: SnackBarType.success)
               .snackBar());
     }
 

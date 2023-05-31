@@ -9,7 +9,7 @@ class Loader extends StatelessWidget {
     return Container(
       width: double.infinity,
       height: double.infinity,
-      color: const Color.fromARGB(100, 0, 0, 0),
+      color: loginBlue,
       child: const Center(
         child: CircularProgressIndicator(color: primaryOrange),
       ),

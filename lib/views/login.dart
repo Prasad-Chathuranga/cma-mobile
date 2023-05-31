@@ -2,15 +2,13 @@ import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
 
-import 'package:cma_mobile/models/api_response.dart';
-import 'package:cma_mobile/services/user_services.dart';
+import 'package:cma_mobile/constants.dart';
 import 'package:cma_mobile/widgets/common/loader.dart';
 import 'package:flutter/material.dart';
 import 'package:cma_mobile/helpers/connection_helper.dart';
 import 'package:cma_mobile/helpers/data_helper.dart';
 import 'package:cma_mobile/widgets/common/snackbar.dart';
 
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:http/http.dart' as http;
@@ -26,7 +24,7 @@ class _LoginState extends State<Login> {
   final _formKey = GlobalKey<FormState>();
   bool userInfoLoaded = false;
   bool loading = false;
-  String? code = 'ACMA1514', password = '12345';
+  String? code, password;
 
   @override
   void initState() {
@@ -61,14 +59,14 @@ class _LoginState extends State<Login> {
       setState(() {
         loading = true;
       });
-      
+
       var value = await ConnectionHelper(context)
           .createRequest<ConnectionHelper>('get', '/')
           .withToken()
           .sendAndMap();
-     
+
       if (value == null) {
-        sc.showSnackBar(const FlairSnackBar(
+        sc.showSnackBar(const CMASnackBar(
           'Unable to contact the server!',
         ).snackBar());
       }
@@ -77,6 +75,7 @@ class _LoginState extends State<Login> {
         //Valid status code
 
         provider.setUserData(value.data!['data']);
+        // provider.setCPDCourseData(value.data!['data']['cpd_events']);
 
         if (context.mounted) {
           context.go('/');
@@ -85,8 +84,7 @@ class _LoginState extends State<Login> {
       }
       //Invalid status code
       else {
-        // print(value.responseCode);
-        sc.showSnackBar(FlairSnackBar(
+        sc.showSnackBar(CMASnackBar(
           value.message ?? 'Error',
         ).snackBar());
 
@@ -101,7 +99,7 @@ class _LoginState extends State<Login> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color.fromARGB(255, 5, 25, 50),
+      backgroundColor: loginBlue,
       appBar: null,
       body: SafeArea(
         child: Stack(
@@ -149,7 +147,6 @@ class _LoginState extends State<Login> {
                         return null;
                       },
                       onChanged: (value) => code = value,
-                     
                     ),
                   ),
                   Padding(
@@ -175,7 +172,6 @@ class _LoginState extends State<Login> {
                         return null;
                       },
                       onChanged: (value) => password = value,
-                      
                     ),
                   ),
                   Align(
@@ -200,27 +196,25 @@ class _LoginState extends State<Login> {
                       ),
                     ),
                   ),
-                  Align(
-                    alignment: Alignment.centerRight,
-                    child: Container(
-                      margin: const EdgeInsets.only(top: 30.0),
-                      child: TextButton(
-                        onPressed: () {},
-                        child: const Text(
-                          'Retrive Password',
-                          style: TextStyle(color: Colors.blue, fontSize: 16),
-                        ),
-                      ),
-                    ),
-                  ),
+                  // Align(
+                  //   alignment: Alignment.centerRight,
+                  //   child: Container(
+                  //     margin: const EdgeInsets.only(top: 30.0),
+                  //     child: TextButton(
+                  //       onPressed: () {},
+                  //       child: const Text(
+                  //         'Retrive Password',
+                  //         style: TextStyle(color: Colors.blue, fontSize: 16),
+                  //       ),
+                  //     ),
+                  //   ),
+                  // ),
                 ],
               ),
             ),
-             if (loading) const Loader()
+            if (loading) const Loader()
           ],
-          
         ),
-   
       ),
     );
   }
@@ -257,7 +251,7 @@ class _LoginState extends State<Login> {
     });
 
     if (response == null) {
-      sc.showSnackBar(const FlairSnackBar(
+      sc.showSnackBar(const CMASnackBar(
         'Unable to contact the server!',
       ).snackBar());
     }
@@ -268,19 +262,21 @@ class _LoginState extends State<Login> {
       response.data!['data'].remove('token');
 
       provider.setUserData(response.data!['data']);
-
+   
       if (context.mounted) context.go('/');
-    } else {
-      if (context.mounted) {
-        sc.showSnackBar(FlairSnackBar(
-          response.message ?? 'Error',
-        ).snackBar());
-      }
-
-      setState(() {
-        loading = false;
-        userInfoLoaded = true;
-      });
+    } else if (response.responseCode == 500) {
+      sc.showSnackBar(CMASnackBar(
+        'Unable to contact the server!',
+      ).snackBar());
+    } else if (context.mounted) {
+      sc.showSnackBar(CMASnackBar(
+        response.message ?? 'Error',
+      ).snackBar());
     }
+
+    setState(() {
+      loading = false;
+      userInfoLoaded = true;
+    });
   }
 }

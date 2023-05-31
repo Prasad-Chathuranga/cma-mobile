@@ -56,12 +56,6 @@ class _CPDCredits extends State<CPDCredits> {
   void initState() {
     // TODO: implement initState
     super.initState();
-
-    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      var provider = Provider.of<DataHelper>(context, listen: false);
-      provider.addListener(_providerListener);
-    });
-    ;
   }
 
   void _providerListener() {
@@ -81,7 +75,7 @@ class _CPDCredits extends State<CPDCredits> {
         .withToken()
         .sendAndMap();
 
-    provider.setCPDCreditsData(value!.data!['data']);
+    // provider.setCPDCreditsData(value!.data!['data']);
 
     DateTime nowDate = DateTime.now();
     int currYear = nowDate.year;
@@ -111,10 +105,8 @@ class _CPDCredits extends State<CPDCredits> {
     DateTime nowDate = DateTime.now();
     int currYear = nowDate.year;
 
-    // print(provider.getCPD());
     return Container(
       child: Card(
-        // color: Color.fromARGB(106, 160, 156, 156),
         child: Container(
           decoration: BoxDecoration(
               color: Color.fromARGB(255, 255, 255, 255),
@@ -132,17 +124,7 @@ class _CPDCredits extends State<CPDCredits> {
                     blurRadius: 0,
                     spreadRadius: 0)
               ]),
-          // decoration: const BoxDecoration(
-          //   borderRadius: BorderRadius.all(Radius.circular(10.0)),
-          //   gradient: LinearGradient(
-          //       begin: Alignment.topLeft,
-          //       end: Alignment(0.8, 1),
-          //       colors: <Color>[
-          //         Color.fromARGB(255, 255, 171, 92),
-          //         Color.fromARGB(216, 241, 27, 27),
-          //       ],
-          //       tileMode: TileMode.mirror),
-          // ),
+          
           child: SizedBox(
             width: 350,
             height: 150,
@@ -173,7 +155,9 @@ class _CPDCredits extends State<CPDCredits> {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Text(
-                                      provider.getCPDByYear(currYear.toString()),
+                                      provider.getCPDByYear(
+                                              currYear.toString()) +
+                                          '/20',
                                       style: TextStyle(
                                         color: Colors.red.shade400,
                                         fontSize: 18.0,
@@ -195,14 +179,16 @@ class _CPDCredits extends State<CPDCredits> {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Text(
-                                        provider.getCPDByYear((currYear-1).toString()),
+                                        provider.getCPDByYear(
+                                                (currYear - 1).toString()) +
+                                            '/20',
                                         style: TextStyle(
                                           color: Colors.red.shade400,
                                           fontSize: 18.0,
                                           fontWeight: FontWeight.bold,
                                         )),
                                     Text(
-                                      (currYear-1).toString(),
+                                      (currYear - 1).toString(),
                                       style: TextStyle(
                                         color:
                                             const Color.fromARGB(255, 34, 5, 4),
@@ -215,7 +201,9 @@ class _CPDCredits extends State<CPDCredits> {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Text(
-                                      provider.getCPDByYear((currYear-2).toString()),
+                                      provider.getCPDByYear(
+                                              (currYear - 2).toString()) +
+                                          '/20',
                                       style: TextStyle(
                                         color: Colors.red.shade400,
                                         fontSize: 18.0,
@@ -223,7 +211,7 @@ class _CPDCredits extends State<CPDCredits> {
                                       ),
                                     ),
                                     Text(
-                                      (currYear-2).toString(),
+                                      (currYear - 2).toString(),
                                       style: TextStyle(
                                         color:
                                             const Color.fromARGB(255, 34, 5, 4),
@@ -243,11 +231,6 @@ class _CPDCredits extends State<CPDCredits> {
                         height: 120,
                         child: Image.asset('assets/images/cpd.png'),
                       )
-                      // Icon(
-                      //   Icons.menu_book,
-                      //   size: 70.0,
-                      //   color: Colors.white,
-                      // )
                     ],
                   ),
                 ],

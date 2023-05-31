@@ -20,6 +20,7 @@ class DataHelper with ChangeNotifier {
 
   Map? _userData;
   Map? _cpdCreditsData;
+  Map? _cpdCourseData;
 
   void Function(int type)? _operationCallback;
 
@@ -105,6 +106,16 @@ class DataHelper with ChangeNotifier {
     });
   }
 
+  // void setCPDCourseData(List<dynamic> data) {
+  //   _cpdCourseData = <String, dynamic>{};
+
+  //   data.forEach((key, value) {
+  //     print(value);
+  //   });
+
+  //   print(_cpdCourseData);
+  // }
+
   ///Sets callback which will be called when data has changed
   DataHelper setOperationCallback(void Function(int) fn) {
     _operationCallback = fn;
@@ -147,12 +158,20 @@ class DataHelper with ChangeNotifier {
     return _userData?['path'] ?? '';
   }
 
+  String getCategoryId() {
+    return _userData?['category_id'] ?? '';
+  }
+
   String getProPic() {
     return _userData?['image'] ?? '';
   }
 
   String getCustomerId() {
     return _userData?['customer_id'] ?? '';
+  }
+
+  String getStudentId() {
+    return _userData?['student_id'] ?? '';
   }
 
   String getCPDByYear(String year) {
