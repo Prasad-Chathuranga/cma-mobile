@@ -149,7 +149,7 @@ class _LoginState extends State<Login> {
                         return null;
                       },
                       onChanged: (value) => code = value,
-                      initialValue: 'ACMA1514',
+                     
                     ),
                   ),
                   Padding(
@@ -175,7 +175,7 @@ class _LoginState extends State<Login> {
                         return null;
                       },
                       onChanged: (value) => password = value,
-                      initialValue: '12345',
+                      
                     ),
                   ),
                   Align(
