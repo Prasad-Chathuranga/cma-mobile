@@ -33,7 +33,7 @@ class UserDetails extends StatelessWidget {
     }
 
     return Container(
-      padding: const EdgeInsets.only(left: 16.0, right: 16.0),
+      padding: const EdgeInsets.only(left: 25.0, right: 25.0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [

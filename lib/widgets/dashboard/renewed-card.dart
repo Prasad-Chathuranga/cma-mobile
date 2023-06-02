@@ -19,22 +19,7 @@ class RenewedCard extends StatelessWidget {
               Renewed(),
             ],
           ),
-          SizedBox(height: 15.0),
-          // ListView.separated(
-          //   shrinkWrap: true,
-          //   physics: NeverScrollableScrollPhysics(),
-          //   itemBuilder: (BuildContext context, int index) {
-          //     return CoinCard(
-          //       coin: StaticData.otherCoins[index],
-          //     );
-          //   },
-          //   separatorBuilder: (BuildContext context, int index) {
-          //     return SizedBox(
-          //       height: 15.0,
-          //     );
-          //   },
-          //   itemCount: StaticData.otherCoins.length,
-          // )
+          SizedBox(height: 15.0)
         ],
       ),
     );
@@ -46,16 +31,15 @@ class Renewed extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     var provider = Provider.of<DataHelper>(context, listen: false);
 
-
-    return Container(
+    return Expanded(
+        child: Container(
       child: Card(
         // color: Color.fromARGB(106, 160, 156, 156),
         child: Container(
           decoration: BoxDecoration(
-              color: Color.fromARGB(255, 255, 255, 255),
+              color: const Color.fromARGB(255, 255, 255, 255),
               borderRadius: BorderRadius.circular(15),
               boxShadow: const [
                 BoxShadow(
@@ -70,22 +54,10 @@ class Renewed extends StatelessWidget {
                     blurRadius: 0,
                     spreadRadius: 0)
               ]),
-          // decoration: const BoxDecoration(
-          //   borderRadius: BorderRadius.all(Radius.circular(10.0)),
-          //   gradient: LinearGradient(
-          //       begin: Alignment.topLeft,
-          //       end: Alignment(0.8, 1),
-          //       colors: <Color>[
-          //         Color.fromARGB(255, 255, 171, 92),
-          //         Color.fromARGB(216, 241, 27, 27),
-          //       ],
-          //       tileMode: TileMode.mirror),
-          // ),
+
           child: SizedBox(
-            width: 350,
-            height: 150,
             child: Padding(
-              padding: EdgeInsets.all(15.0),
+              padding: const EdgeInsets.all(15.0),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -93,7 +65,7 @@ class Renewed extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       const Padding(padding: EdgeInsets.only(top: 15.0)),
-                      Row(children: [
+                      const Row(children: [
                         Text(
                           'Renewed Upto',
                           style: TextStyle(
@@ -113,10 +85,10 @@ class Renewed extends StatelessWidget {
                           textAlign: TextAlign.left,
                         ),
                       ]),
-                       Row(children: [
+                      Row(children: [
                         Text(
                           provider.getPath(),
-                          style: TextStyle(
+                          style: const TextStyle(
                             color: Color.fromARGB(255, 5, 25, 50),
                             fontSize: 15.0,
                             fontWeight: FontWeight.bold,
@@ -146,6 +118,7 @@ class Renewed extends StatelessWidget {
           ),
         ),
       ),
+    )
     );
   }
 }

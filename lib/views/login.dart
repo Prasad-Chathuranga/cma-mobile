@@ -83,21 +83,37 @@ class _LoginState extends State<Login> {
         return;
       }
       //Invalid status code
-      else {
-        sc.showSnackBar(CMASnackBar(
-          value.message ?? 'Error',
-        ).snackBar());
-
+      else if (value.message == null) {
         setState(() {
           loading = false;
           userInfoLoaded = true;
         });
+      } else {
+        sc.showSnackBar(CMASnackBar(
+          value.message ?? 'Error',
+        ).snackBar());
       }
     }
   }
 
   @override
   Widget build(BuildContext context) {
+     Widget _inputField(String title, Color border) {
+        return TextField(
+          decoration: InputDecoration(
+            hintText: title,
+            enabledBorder: UnderlineInputBorder(
+              borderSide: BorderSide(color: border),
+            ),
+            focusedBorder: UnderlineInputBorder(
+              borderSide: BorderSide(color: border),
+            ),
+            border: UnderlineInputBorder(
+              borderSide: BorderSide(color: border),
+            ),
+          ),
+        );
+      }
     return Scaffold(
       backgroundColor: loginBlue,
       appBar: null,
@@ -106,17 +122,20 @@ class _LoginState extends State<Login> {
           children: [
             Form(
               key: _formKey,
-              child: Column(
+              child: 
+              Column(
+
                 children: <Widget>[
-                  Padding(
-                    padding: const EdgeInsets.only(top: 100.0),
-                    child: Center(
+                  Padding(padding: const EdgeInsets.only(top: 60)),
+                  // Padding(
+                  //   padding: const EdgeInsets.only(top: 1.0),
+                    Center(
                       child: SizedBox(
                           width: 180,
                           height: 180,
                           child: Image.asset('assets/images/logo.png')),
                     ),
-                  ),
+                  // ),
                   Container(
                     padding: const EdgeInsets.only(top: 10.0, bottom: 20.0),
                     child: const Text(
@@ -209,8 +228,10 @@ class _LoginState extends State<Login> {
                   //     ),
                   //   ),
                   // ),
+                  
                 ],
               ),
+              
             ),
             if (loading) const Loader()
           ],
@@ -262,13 +283,13 @@ class _LoginState extends State<Login> {
       response.data!['data'].remove('token');
 
       provider.setUserData(response.data!['data']);
-   
+
       if (context.mounted) context.go('/');
-    } else if (response.responseCode == 500) {
+    } else if (response.responseCode == 500 || response.message == null) {
       sc.showSnackBar(CMASnackBar(
         'Unable to contact the server!',
       ).snackBar());
-    } else if (context.mounted) {
+    } else {
       sc.showSnackBar(CMASnackBar(
         response.message ?? 'Error',
       ).snackBar());

@@ -47,8 +47,7 @@ class _UpcomingCpdsState extends State<UpcomingCpds> {
         cpdList?.forEach(
           (value) {
             children.add(
-              Card(
-                child: Container(
+               Container(
                   decoration: BoxDecoration(
                       color: Color.fromARGB(255, 255, 255, 255),
                       borderRadius: BorderRadius.circular(10.0),
@@ -66,29 +65,32 @@ class _UpcomingCpdsState extends State<UpcomingCpds> {
                             spreadRadius: 0)
                       ]),
                   child: SizedBox(
-                    width: 350.0,
-                    height: 120.0,
                     child: Padding(
                       padding: EdgeInsets.all(15.0),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
+                          Expanded(child: 
                           Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.stretch,
                             children: [
-                              Padding(padding: EdgeInsets.only(top: 5.0)),
+                              const Padding(padding: EdgeInsets.only(top: 5.0)),
                               Row(children: [
                                 // Flexible(child: child)
-                                SizedBox(
-                                  width: 320.0,
-                                  child: Text(
+                                Expanded(
+                                  child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+
+                                    children: [ Text(
                                     value['instance'],
-                                    style: TextStyle(
+                                    style: const TextStyle(
                                         color: Color.fromARGB(255, 5, 25, 50),
                                         fontSize: 14.0,
                                         fontWeight: FontWeight.bold),
-                                    softWrap: true,
+                                        softWrap: true,
+                                        textAlign: TextAlign.left,
                                   ),
+                              ]),
                                 ),
                               ]),
                               Row(mainAxisSize: MainAxisSize.max, children: [
@@ -100,7 +102,7 @@ class _UpcomingCpdsState extends State<UpcomingCpds> {
                                           crossAxisAlignment:
                                               CrossAxisAlignment.start,
                                           children: [
-                                            Padding(
+                                            const Padding(
                                                 padding:
                                                     EdgeInsets.only(top: 2.0)),
                                             Text(
@@ -112,9 +114,8 @@ class _UpcomingCpdsState extends State<UpcomingCpds> {
                                               ),
                                             ),
                                             Text(
-                                              value['credits'].toString() +
-                                                  ' credits',
-                                              style: TextStyle(
+                                              '${value['credits']} credits',
+                                              style: const TextStyle(
                                                 color: Color.fromARGB(
                                                     255, 194, 106, 106),
                                                 fontSize: 14.0,
@@ -127,33 +128,33 @@ class _UpcomingCpdsState extends State<UpcomingCpds> {
                               ])
                             ],
                           ),
-                        ],
+                      )],
                       ),
                     ),
                   ),
                 ),
-              ),
+              
+            
             );
 
-            children.add(const SizedBox(height: 12));
+            children.add(const SizedBox(height: 15.0));
           },
         );
       } else {
         children.add(
-          const Padding(padding: EdgeInsets.only(left: 25.0),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-             Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-          Text("No Upcoming CPD Events !", textAlign: TextAlign.left)
-          ])
-          ])),
-          
-         
-          );
-        
+          const Padding(
+              padding: EdgeInsets.only(left: 25.0),
+              child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text("No Upcoming CPD Events !",
+                              textAlign: TextAlign.left)
+                        ])
+                  ])),
+        );
       }
 
       setState(() {
@@ -165,9 +166,39 @@ class _UpcomingCpdsState extends State<UpcomingCpds> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: children,
-    );
+    return Container(
+      padding: EdgeInsets.all(25.0),
+      child: Column(children: children)
+      );
+
+    // return Expanded(child:  Column(children: children));
+    // return Container(
+    //   padding: const EdgeInsets.symmetric(horizontal: 16.0),
+    //   child: Column(
+    //     crossAxisAlignment: CrossAxisAlignment.stretch,
+    //     children: [
+    //       Row(
+    //         mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    //         children: children,
+    //       ),
+    //       SizedBox(height: 15.0)
+    //     ]
+    //   ),
+    //   );
+
+    // Expanded(child: Container(
+    //   padding: const EdgeInsets.symmetric(horizontal: 16.0),
+    //   child: Column(
+    //       crossAxisAlignment: CrossAxisAlignment.stretch,
+    //       children: [
+    //         Row(
+    //           mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    //           children: children,
+    //         ),
+    //         SizedBox(height: 15.0),
+    //       ]),
+    // )
+    // );
     // if (loading) const Loader()
   }
 }

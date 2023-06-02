@@ -11,9 +11,14 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:validators/validators.dart';
+import 'package:device_preview/device_preview.dart';
+
 
 void main() {
-  runApp(MyApp());
+  runApp(
+    DevicePreview(builder: (context) => MyApp(), enabled: true,)
+    // MyApp()
+    );
 }
 
 Widget MyApp() {
@@ -30,7 +35,7 @@ final GoRouter _router =
     builder: (context, state) => const Login(),
   ),
   GoRoute(path: '/', builder: (context, state) => const Dashboard(), routes: [
-     GoRoute(
+    GoRoute(
       path: 'logout',
       builder: (context, state) => const logout(),
     ),
@@ -43,7 +48,6 @@ final GoRouter _router =
     //   builder: (context, state) => const FlairContact(),
     // )
   ]),
-   
 ]);
 
 class MainRouter extends StatelessWidget {
@@ -52,6 +56,11 @@ class MainRouter extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp.router(
+      //Device Preview
+      useInheritedMediaQuery: true,
+      locale: DevicePreview.locale(context),
+      builder: DevicePreview.appBuilder,
+
       routerConfig: _router,
       // color: FlairColors.primaryBg,
 
