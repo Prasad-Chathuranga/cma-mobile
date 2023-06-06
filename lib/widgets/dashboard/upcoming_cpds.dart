@@ -140,6 +140,10 @@ class _UpcomingCpdsState extends State<UpcomingCpds> {
             children.add(const SizedBox(height: 15.0));
           },
         );
+        setState(() {
+        cpdLoaded = true;
+        loading = false;
+      });
       } else {
         children.add(
           const Padding(
