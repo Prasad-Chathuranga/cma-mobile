@@ -16,7 +16,7 @@ import 'package:device_preview/device_preview.dart';
 
 void main() {
   runApp(
-    DevicePreview(builder: (context) => MyApp(), enabled: true,)
+    DevicePreview(builder: (context) => MyApp(), enabled: false,)
     // MyApp()
     );
 }
@@ -29,12 +29,13 @@ Widget MyApp() {
 }
 
 final GoRouter _router =
-    GoRouter(initialLocation: '/login', routes: <RouteBase>[
+  GoRouter(initialLocation: '/login', routes: <RouteBase>[
   GoRoute(
     path: '/login',
     builder: (context, state) => const Login(),
   ),
-  GoRoute(path: '/', builder: (context, state) => const Dashboard(), routes: [
+  GoRoute(path: '/', builder: (context, state) => const Dashboard(), 
+  routes: [
     GoRoute(
       path: 'logout',
       builder: (context, state) => const logout(),

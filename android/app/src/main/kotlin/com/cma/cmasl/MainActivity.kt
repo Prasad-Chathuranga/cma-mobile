@@ -1,4 +1,4 @@
-package com.example.cma_mobile
+package com.cma.cmasl
 
 import io.flutter.embedding.android.FlutterActivity
 

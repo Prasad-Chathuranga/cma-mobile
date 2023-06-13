@@ -3,6 +3,7 @@ import 'package:cma_mobile/helpers/connection_helper.dart';
 import 'package:cma_mobile/helpers/data_helper.dart';
 import 'package:cma_mobile/logout.dart';
 import 'package:cma_mobile/views/results.dart';
+import 'package:cma_mobile/widgets/common/loader.dart';
 import 'package:cma_mobile/widgets/common/snackbar.dart';
 import 'package:cma_mobile/widgets/dashboard/cpd-credits-card.dart';
 import 'package:cma_mobile/widgets/dashboard/renewed-card.dart';
@@ -20,10 +21,20 @@ class Dashboard extends StatefulWidget {
 }
 
 class _DashboardState extends State<Dashboard> {
+  bool loading = false;
+  final GlobalKey<RefreshIndicatorState> _refreshIndicatorKey =
+      GlobalKey<RefreshIndicatorState>();
+
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
+
+    // Future.delayed(const Duration(seconds: 5), () {
+    //   setState(() {
+    //     loading = true;
+    //   });
+    // });
   }
 
   @override
@@ -39,11 +50,24 @@ class _DashboardState extends State<Dashboard> {
             Navigator.push(
                 context, MaterialPageRoute(builder: (_) => const Results()));
           },
-        )
-        ;
+        );
       } else {
         return null;
       }
+    }
+
+    Future<void> reloadPage() async {
+       setState(() {
+          loading = true;
+        });
+      Future.delayed(const Duration(seconds: 2), () {
+
+        setState(() {
+          loading = false;
+        });
+      });
+
+      
     }
 
     return Scaffold(
@@ -73,15 +97,6 @@ class _DashboardState extends State<Dashboard> {
               ),
             ),
             Container(child: resultsState()),
-            // ListTile(
-            //   leading: Icon(Icons.bookmark_added_outlined),
-            //   title: const Text('Results'),
-            //   onTap: () {
-            //     Navigator.push(context,
-            //         MaterialPageRoute(builder: (_) => const Results()));
-            //   },
-            // ),
-            
             Container(
                 // This align moves the children to the bottom
                 child: Align(
@@ -93,7 +108,7 @@ class _DashboardState extends State<Dashboard> {
                       children: <Widget>[
                         ListTile(
                           leading: Icon(Icons.logout_outlined),
-                          title: Text('Logout'),
+                          title: Text('Log out'),
                           onTap: () {
                             context.go('/logout');
                           },
@@ -102,75 +117,80 @@ class _DashboardState extends State<Dashboard> {
                         //     leading: Icon(Icons.help),
                         //     title: Text('Help and Feedback'))
                       ],
-                    ))))
+                    )))),
           ],
         ),
       ),
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            SizedBox(
-              height: 25.0,
-            ),
-            UserDetails(),
-            SizedBox(
-              height: 10.0,
-            ),
-            Padding(
-              padding: EdgeInsets.symmetric(horizontal: 16.0),
-              child: Divider(
-                color: Color.fromRGBO(97, 99, 119, 1),
+      body: RefreshIndicator.adaptive(
+        key: _refreshIndicatorKey,
+        color: primaryOrange,
+        backgroundColor: primaryBlue,
+        strokeWidth: 4.0,
+        onRefresh: () async {
+          // Replace this delay with the code to be executed during refresh
+          // and return a Future when code finishes execution.
+          // return Future<void>.delayed(const Duration(seconds: 3));
+          return reloadPage();
+        },
+        child: Stack(children: [
+        SingleChildScrollView(
+          child: Column(
+            children: [
+         
+              const SizedBox(
+                height: 25.0,
               ),
-            ),
-            SizedBox(
-              height: 15.0,
-            ),
-            Container(
-              width: double.infinity,
-              constraints: BoxConstraints(
-                minHeight: MediaQuery.of(context).size.height - 200.0,
+               if (!loading) const UserDetails(),
+              const SizedBox(
+                height: 10.0,
               ),
-              decoration: const BoxDecoration(
-                borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(30.0),
-                  topRight: Radius.circular(30.0),
+               if (!loading) const Padding(
+                padding: EdgeInsets.symmetric(horizontal: 16.0),
+                child: Divider(
+                  color: Color.fromRGBO(97, 99, 119, 1),
                 ),
-                // color: Color.fromRGBO(240, 235, 220, 1),
               ),
-              child: Column(
-                children: [
-                  // Padding(
-                  //   padding: EdgeInsets.only(top: 30.0),
-                  // ),
-                  RenewedCard(),
-                  CPDCreditsCard(),
-                  SizedBox(
-                    height: 10.0,
+              const SizedBox(
+                height: 15.0,
+              ),
+              Container(
+                width: double.infinity,
+                constraints: BoxConstraints(
+                  minHeight: MediaQuery.of(context).size.height - 200.0,
+                ),
+                decoration: const BoxDecoration(
+                  borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(30.0),
+                    topRight: Radius.circular(30.0),
                   ),
-                  Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 16.0),
-                  ),
-                  Align(
-                    alignment: Alignment.centerLeft,
-                    child: Padding(
-                      padding: EdgeInsets.only(left: 25.0, bottom: 10.0),
-                      child: Text(
-                        'Upcoming CPDs',
-                        style: TextStyle(
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 15.0),
-                      ),
+                  // color: Color.fromRGBO(240, 235, 220, 1),
+                ),
+                child: Column(
+                  children: [
+                    if (!loading) RenewedCard(),
+                    if (!loading) CPDCreditsCard(),
+                    SizedBox(
+                      height: 10.0,
                     ),
-                  ),
-
-                  UpcomingCpds()
-                ],
+                    Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 16.0),
+                    ),
+                    if (!loading) UpcomingCpds(),
+                  ],
+                ),
               ),
-            ),
-          ],
+            
+            ],
+            
+          ),
+          
+        ),
+        if (loading) const Loader(),
+        ],
         ),
       ),
+      
     );
+    
   }
 }

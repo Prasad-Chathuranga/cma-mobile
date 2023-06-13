@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 import 'dart:typed_data';
+import 'package:intl/intl.dart';
 
 import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
@@ -9,8 +10,11 @@ import 'package:uuid/uuid.dart';
 
 class DataHelper with ChangeNotifier {
   //API
-  static String get apiEndPoint => 'localhost:8000';
-  static String get apiPath => 'api/mobile';
+  static String get apiEndPoint => "senska-ua.a2hosted.com";
+  static String get apiPath => 'erp/public/api/mobile';
+
+  // static String get apiEndPoint => "localhost:8000";
+  // static String get apiPath => 'api/mobile';
 
   SharedPreferences? _pref;
   String? _deviceId;
@@ -77,6 +81,10 @@ class DataHelper with ChangeNotifier {
   /// Get the login token
   String getToken() {
     return _token ?? '';
+  }
+
+  void setToken(token) {
+    _token = token;
   }
 
   Future<String> writeToken(String token) async {

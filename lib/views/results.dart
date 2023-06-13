@@ -19,8 +19,8 @@ class Results extends StatefulWidget {
 class _ResultsState extends State<Results> {
   final _headerStyle = const TextStyle(
       color: Color(0xffffffff), fontSize: 15, fontWeight: FontWeight.bold);
-  final _contentStyleHeader = const TextStyle(
-      color: Color(0xff999999), fontSize: 14, fontWeight: FontWeight.w700);
+  final _contentStyleHeader =
+      const TextStyle(color: Color(0xff999999), fontSize: 1);
   final _contentStyle = const TextStyle(
       color: Color(0xff999999), fontSize: 14, fontWeight: FontWeight.normal);
 
@@ -57,51 +57,48 @@ class _ResultsState extends State<Results> {
       results = value.data!['data'];
 
       results?.forEach((key, res) {
-        List<DataRow> dataRows = [];
+        List<TableRow> dataRows = [];
 
         res?.forEach((r) {
-          dataRows.add(DataRow(cells: [
-            DataCell(
-                Text(r[0], style: _contentStyle, textAlign: TextAlign.right)),
-            DataCell(Text(r[1], style: _contentStyle)),
-            DataCell(
-                Text(r[2], style: _contentStyle, textAlign: TextAlign.right))
-          ]));
+          
+          dataRows.add(
+            // Text(r[1], style: _contentStyle, textAlign: TextAlign.right),
+            // Text(r[2], style: _contentStyle, textAlign: TextAlign.right)
+            TableRow(children: [
+             
+              // DataCell(Text(r[0], style: _contentStyle, textAlign: TextAlign.right)),
+              TableCell(child: Padding(padding: EdgeInsets.only(bottom: 10), child: Text(r[1], style: _contentStyle),) ),
+              TableCell(child: Padding(padding: EdgeInsets.only(bottom: 10), child:Text(r[2], style: _contentStyle, textAlign: TextAlign.right))),
+            ]),
+          );
         });
 
         children.add(AccordionSection(
           isOpen: false,
-          leftIcon: const Icon(Icons.insights_rounded, color: Colors.white),
+          // leftIcon: const Icon(Icons.insights_rounded, color: Colors.white),
           headerBackgroundColor: loginBlue,
           headerBackgroundColorOpened: resultsHeader,
           header: Text(key, style: _headerStyle),
-          content: DataTable(
-            sortAscending: true,
-            sortColumnIndex: 1,
-            dataRowMaxHeight: 100.0,
-            showBottomBorder: false,
-            columns: [
-              DataColumn(
-                label: Text('Code', style: _contentStyleHeader),
-              ),
-              DataColumn(label: Text('Name', style: _contentStyleHeader)),
-              DataColumn(
-                label: Text('Result', style: _contentStyleHeader),
-              ),
-            ],
-            rows: dataRows,
+          content: Table(
+            border: const TableBorder(
+                horizontalInside: BorderSide(
+                    width: 1,
+                    color: Colors.transparent,
+                    style: BorderStyle.solid)),
+            children: dataRows,
           ),
           contentHorizontalPadding: 20,
-          contentBorderWidth: 1,
+          contentBorderWidth: 2,
           // onOpenSection: () => print('onOpenSection ...'),
           // onCloseSection: () => print('onCloseSection ...'),
         ));
       });
-
-      setState(() {
-        resultsLoaded = true;
-        loading = false;
-      });
+      if (context.mounted) {
+        setState(() {
+          resultsLoaded = true;
+          loading = false;
+        });
+      }
     }
   }
 
@@ -118,8 +115,8 @@ class _ResultsState extends State<Results> {
               headerBackgroundColorOpened: Colors.black54,
               scaleWhenAnimating: true,
               openAndCloseAnimation: true,
-              headerPadding:
-                  const EdgeInsets.symmetric(vertical: 7, horizontal: 15),
+              // headerPadding:
+              //     const EdgeInsets.symmetric(vertical: 7, horizontal: 15),
               sectionOpeningHapticFeedback: SectionHapticFeedback.heavy,
               sectionClosingHapticFeedback: SectionHapticFeedback.light,
               children: children),

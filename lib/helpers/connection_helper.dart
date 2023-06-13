@@ -23,6 +23,7 @@ class ConnectionHelper {
   Future<http.StreamedResponse>? send() {
     if (_useToken) {
       _request!.headers['Authorization'] = 'Bearer ${dataProvider.getToken()}';
+      // print(_request!.headers['Authorization']);
     }
 
     _request!.headers['Flair-Device'] = dataProvider.getDeviceId();
