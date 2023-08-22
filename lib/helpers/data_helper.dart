@@ -10,7 +10,7 @@ import 'package:uuid/uuid.dart';
 
 class DataHelper with ChangeNotifier {
   //API
-  static String get apiEndPoint => "senska-ua.a2hosted.com";
+  static String get apiEndPoint => "ua.senska-aws.com";
   static String get apiPath => 'erp/public/api/mobile';
 
   // static String get apiEndPoint => "localhost:8000";

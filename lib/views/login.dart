@@ -61,11 +61,12 @@ class _LoginState extends State<Login> {
                     children: <Widget>[
                       Center(
                         child: SizedBox(
-                            width: 180,
-                            height: 180,
+                            width: 150,
+                            height: 150,
                             child: Image.asset('assets/images/logo.png')),
                       ),
                       const Center(
+                        heightFactor: 2.0,
                         child: Text(
                           'Login to your account',
                           style: TextStyle(
@@ -320,7 +321,7 @@ class _LoginState extends State<Login> {
 
     if (response!.responseCode == 200) {
       provider.writeToken(response.data!['data']['token']);
-      
+
       provider.setToken(response.data!['data']['token']);
 
       response.data!['data'].remove('token');

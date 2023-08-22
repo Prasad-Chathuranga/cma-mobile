@@ -57,17 +57,14 @@ class _DashboardState extends State<Dashboard> {
     }
 
     Future<void> reloadPage() async {
-       setState(() {
-          loading = true;
-        });
+      setState(() {
+        loading = true;
+      });
       Future.delayed(const Duration(seconds: 2), () {
-
         setState(() {
           loading = false;
         });
       });
-
-      
     }
 
     return Scaffold(
@@ -86,10 +83,13 @@ class _DashboardState extends State<Dashboard> {
                   children: [
                     Column(
                       children: [
-                        SizedBox(
-                            width: 135,
-                            height: 135,
-                            child: Image.asset('assets/images/logo.png')),
+                        Center(
+                          heightFactor: 1.3,
+                          child: SizedBox(
+                              width: 100,
+                              height: 100,
+                              child: Image.asset('assets/images/logo.png')),
+                        )
                       ],
                     )
                   ],
@@ -132,65 +132,61 @@ class _DashboardState extends State<Dashboard> {
           // return Future<void>.delayed(const Duration(seconds: 3));
           return reloadPage();
         },
-        child: Stack(children: [
-        SingleChildScrollView(
-          child: Column(
-            children: [
-         
-              const SizedBox(
-                height: 25.0,
-              ),
-               if (!loading) const UserDetails(),
-              const SizedBox(
-                height: 10.0,
-              ),
-               if (!loading) const Padding(
-                padding: EdgeInsets.symmetric(horizontal: 16.0),
-                child: Divider(
-                  color: Color.fromRGBO(97, 99, 119, 1),
-                ),
-              ),
-              const SizedBox(
-                height: 15.0,
-              ),
-              Container(
-                width: double.infinity,
-                constraints: BoxConstraints(
-                  minHeight: MediaQuery.of(context).size.height - 200.0,
-                ),
-                decoration: const BoxDecoration(
-                  borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(30.0),
-                    topRight: Radius.circular(30.0),
+        child: Stack(
+          children: [
+            SingleChildScrollView(
+              child: Column(
+                children: [
+                  const SizedBox(
+                    height: 25.0,
                   ),
-                  // color: Color.fromRGBO(240, 235, 220, 1),
-                ),
-                child: Column(
-                  children: [
-                    if (!loading) RenewedCard(),
-                    if (!loading) CPDCreditsCard(),
-                    SizedBox(
-                      height: 10.0,
-                    ),
-                    Padding(
+                  if (!loading) const UserDetails(),
+                  const SizedBox(
+                    height: 10.0,
+                  ),
+                  if (!loading)
+                    const Padding(
                       padding: EdgeInsets.symmetric(horizontal: 16.0),
+                      child: Divider(
+                        color: Color.fromRGBO(97, 99, 119, 1),
+                      ),
                     ),
-                    if (!loading) UpcomingCpds(),
-                  ],
-                ),
+                  const SizedBox(
+                    height: 15.0,
+                  ),
+                  Container(
+                    width: double.infinity,
+                    constraints: BoxConstraints(
+                      minHeight: MediaQuery.of(context).size.height - 200.0,
+                    ),
+                    decoration: const BoxDecoration(
+                      borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(30.0),
+                        topRight: Radius.circular(30.0),
+                      ),
+                      // color: Color.fromRGBO(240, 235, 220, 1),
+                    ),
+                    child: Column(
+                      children: [
+                        if (!loading) RenewedCard(),
+                        if (!loading) CPDCreditsCard(),
+                        SizedBox(
+                          height: 10.0,
+                        ),
+                        Padding(
+                          padding: EdgeInsets.symmetric(horizontal: 16.0),
+                        ),
+                        if (!loading) UpcomingCpds(),
+                      ],
+                    ),
+                  ),
+                ],
               ),
-            
-            ],
-            
-          ),
-          
-        ),
-        if (loading) const Loader(),
-        ],
+            ),
+            if (loading) const Loader(),
+          ],
         ),
       ),
-      
     );
-    
   }
 }
